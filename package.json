@@ -7,10 +7,6 @@
     "test": "export NODE_ENV=test && jasmine",
     "start": "node src/server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/vdowsett/blocipedia-node.git"
-  },
   "author": "Vicky Dowsett",
   "license": "ISC",
   "bugs": {
