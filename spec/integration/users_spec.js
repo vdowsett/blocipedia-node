@@ -1,7 +1,9 @@
 const request = require("request");
 const server = require("../../src/server");
 const base = "http://localhost:3000/users/";
+
 const User = require("../../src/db/models").User;
+
 const sequelize = require("../../src/db/models/index").sequelize;
 
 describe("routes : users", () => {
@@ -31,14 +33,15 @@ describe("routes : users", () => {
 
   });
 
-  describe("POST /users/create", () => {
+  describe("POST /users", () => {
 
-    it("should create a new user", (done) => {
+    it("should create a new user and redirect", (done) => {
 
         const options = {
             url: base,
             form: {
                 email: "user@example.com",
+                username: "example",
                 password: "password"
             }
         }
@@ -48,6 +51,7 @@ describe("routes : users", () => {
             User.findOne({where: {email: "user@example.com"}})
             .then((user) => {
                 expect(user).not.toBeNull();
+                expect(user.username).toBe("example");
                 expect(user.email).toBe("user@example.com");
                 expect(user.id).toBe(1);
                 done();
@@ -81,6 +85,7 @@ describe("routes : users", () => {
                 })
             })
     })
+    
   });
 
 //   describe("GET /users/signIn", () => { });

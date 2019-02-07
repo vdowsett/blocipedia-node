@@ -6,6 +6,8 @@
   <body>
 
     <% include ../static/partials/navbar.ejs %>
+
+    <% include ../static/partials/messages.ejs %>
     
     <main class="container">
 
@@ -17,10 +19,10 @@
 
                     <h3>Sign up for an account</h3>
 
-                    <form method="POST" action="/user/signup">
+                    <form method="POST" action="/users">
                         <div class="form-group">
-                            <label>Name:</label>
-                            <input type="text" name="name" placeholder="Enter Name" class="form-control"/>
+                            <label>Username:</label>
+                            <input type="text" name="username" placeholder="Enter Username" class="form-control"/>
                         </div>
                         <div class="form-group">
                             <label>Email:</label>
@@ -29,10 +31,12 @@
                         <div class="form-group">
                             <label>Password:</label>
                             <input type="password" name="password" placeholder="Enter Password" class="form-control"/>
+                            <small class="text-muted" id="passwordHelp">password must match confirmation below</small>
                         </div>
                         <div class="form-group">
                             <label>Password:</label>
                             <input type="password" name="password_conf" placeholder="Enter Password confirmation" class="form-control"/>
+
                         </div><br/>
                         <input type="submit" value="Sign Up" class="btn btn-primary"/>
                     </form>
