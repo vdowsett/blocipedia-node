@@ -6,13 +6,18 @@ const User = require("../../src/db/models").User;
 
 const sequelize = require("../../src/db/models/index").sequelize;
 
+const sgMail = require('@sendgrid/mail');
+
+
+
 describe("routes : users", () => {
 
   beforeEach((done) => {
 
     sequelize.sync({force: true})
     .then(() => {
-      done();
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        done();
     })
     .catch((err) => {
       console.log(err);
@@ -84,7 +89,43 @@ describe("routes : users", () => {
                     console.log(err);
                 })
             })
-    })
+    });
+
+    it("should create a new user, redirect and send an email via sendgrid", (done) => {
+
+        const options = {
+            url: base,
+            form: {
+                email: "vdowsett@gmail.com",
+                username: "example",
+                password: "password"
+            }
+        }
+
+        request.post(options, (err, res, body) => {
+
+            User.findOne({where: {email: "vdowsett@gmail.com"}})
+            .then((user) => {
+
+                const msg = {
+                    to: this.user.email,
+                    from: 'test@example.com',
+                    subject: 'Sending with SendGrid is Fun',
+                    text: 'and easy to do anywhere, even with Node.js',
+                    html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+                  };
+
+                  sgMail.send(msg);
+
+                done();
+            })
+            .catch((err) => {
+                console.log(err);
+                done();
+            })
+          });
+
+    });
     
   });
 
