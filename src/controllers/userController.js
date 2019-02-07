@@ -52,7 +52,7 @@ module.exports = {
         if(!req.user){
           console.log(res);
           req.flash("notice", "Sign in failed. Please try again.")
-          res.redirect("/users/sign_in");
+          res.redirect("/users/sign_up");
         } else {
           req.flash("notice", "You've successfully signed in!");
           res.redirect("/");
@@ -60,5 +60,13 @@ module.exports = {
       })
 
     },
+
+    signOut(req, res, next) {
+      
+      req.logout();
+      req.flash("notice", "You've successfully signed out!");
+      res.redirect("/");
+
+    }
 
 }
