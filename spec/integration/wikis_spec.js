@@ -23,6 +23,7 @@ describe("Wiki", () => {
       })
       .then((user) => {
         this.user = user; //store the user
+        done();
         
         Wiki.create({
           title: "Wiki Example",
@@ -35,44 +36,110 @@ describe("Wiki", () => {
           done();
         })
       })
-    });
-  });
-
-  describe("GET /wikis", () => {
-        
-    it("should view wiki list and have button for new a new wiki", (done) => {
-
-        request.get(base, (err, res, body) => {
-            expect(res.statusCode).toBe(200);
-            expect(err).toBeNull();
-            expect(body).toContain("Wikis");
-            expect(body).toContain("Wiki Example");
-            done();
-        });
-        
-    });
-  });
-
-  describe("GET /new", () => {
-        
-    it("should view new wiki page", (done) => {
-
-      request.get(`${base}new`, (err, res, body) => {
-        expect(res.statusCode).toBe(200);
-        expect(err).toBeNull();
-        expect(body).toContain("New Wiki");
+      .catch((err) => {
         done();
-    });
-        
+      });
     });
   });
 
-  // describe("POST /create", () => {
-        
-  //   it("should create a new wiki", (done) => {
+  describe("wikis pulic access", () => {
 
+    describe("GET /wikis", () => {
         
-  //   });
-  // });
+      it("should view wiki list", (done) => {
+  
+          request.get(base, (err, res, body) => {
+              expect(res.statusCode).toBe(200);
+              expect(err).toBeNull();
+              expect(body).toContain("Wikis");
+              done();
+          });
+          
+      });
+    });
+
+  });
+
+  describe("wikis user access", () => {
+
+    beforeEach((done) => {
+      User.create({
+        email: "member@member.com",
+        username: "member",
+        password: "12345",
+      })
+      .then((user) => {
+        this.user = user;
+        request.get({
+          url: "http://localhost:3000/auth/fake",
+          form: {
+            email: "member@member.com",
+            userId: this.user.id
+          }
+        });
+        done();
+      });
+    });
+
+    describe("GET /wikis", () => {
+        
+      it("should view wiki list with new wiki button visible", (done) => {
+  
+          request.get(base, (err, res, body) => {
+              expect(this.user.id).toBe(2);
+              expect(res.statusCode).toBe(200);
+              expect(err).toBeNull();
+              expect(body).toContain("Wikis");
+              done();
+          });
+          
+      });
+    });
+
+    describe("GET /new", () => {
+        
+      it("should view new wiki page", (done) => {
+  
+        request.get(`${base}new`, (err, res, body) => {
+          expect(res.statusCode).toBe(200);
+          expect(err).toBeNull();
+          expect(body).toContain("New Wiki");
+          done();
+      });
+          
+      });
+    });
+  
+    describe("POST /wikis/create", () => {
+  
+        it("should create a new wiki with associated user ID", (done) => {
+  
+          const options = {
+            url: `${base}create`,
+            form: {
+              title: "Example of wiki create title",
+              body: "Example of wiki create body",
+              private: false,
+            }
+          }
+  
+          request.post(options, (err, res, body) => {
+            Wiki.findOne({where: {title: "Example of wiki create title"}})
+            .then((wiki) => {
+              expect(wiki.title).toBe("Example of wiki create title");
+              expect(wiki.body).toContain("wiki create body");
+              expect(wiki.userId).not.toBeNull();
+              done();
+            })
+            .catch((err) => {
+              console.log(err);
+              done();
+            });
+          });
+        });
+  
+    });
+
+  });
 
 });

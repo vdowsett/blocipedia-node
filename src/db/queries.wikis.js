@@ -15,38 +15,34 @@ module.exports = {
     })
   },
 
-  // addWiki(newWiki, callback){
-  //   return Wiki.create({
-  //     title: newWiki.title,
-  //     description: newWiki.description
-  //   })
-  //   .then((wiki) => {
-  //     callback(null, wiki);
-  //   })
-  //   .catch((err) => {
-  //     callback(err);
-  //   })
-  // },
+  addWiki(newWiki, callback) {
 
-  // getWiki(id, callback) {
+    return Wiki.create({
+      title: newWiki.title,
+      body: newWiki.body,
+      private: newWiki.private,
+      userId: newWiki.userId
+    })
+    .then((wiki) => {
+      callback(null, wiki);
+    })
+    .catch((err) => {
+      callback(err);
+    })
+  },
 
-  //   return Wiki.findById(id,
-  //     {
-  //       include: [{
-  //         model: Post,
-  //         as: "posts"
-  //       }]
-  //     })
+  getWiki(id, callback) {
 
-  //   .then((wiki) => {
-  //     callback(null, wiki);
-  //     console.log("balls getWiki()");
-  //     console.log(wiki.posts);
-  //   })
-  //   .catch((err) => {
-  //     callback(err);
-  //   })
-  // },
+    return Wiki.findById(id)
+
+    .then((wiki) => {
+      callback(null, wiki);
+      console.log(wiki.posts);
+    })
+    .catch((err) => {
+      callback(err);
+    })
+  },
 
   // deleteWiki(req, callback){
   //   return Wiki.findById(req.params.id)

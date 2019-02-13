@@ -8,10 +8,6 @@ module.exports = class ApplicationPolicy {
     _isOwner() {
     return this.record && (this.record.userId == this.user.id);
     }
-
-    _isAdmin() {
-    return this.user && this.user.role == "admin";
-    }
     
     new() {
     return this.user != null;
@@ -27,7 +23,7 @@ module.exports = class ApplicationPolicy {
     
     edit() {
     return this.new() &&
-        this.record && (this._isOwner() || this._isAdmin());
+        this.record && this._isOwner();
     }
 
     update() {
