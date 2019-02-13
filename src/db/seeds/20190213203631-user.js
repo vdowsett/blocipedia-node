@@ -10,6 +10,7 @@ for(let i = 1 ; i <= 10 ; i++){
     username: faker.internet.userName(),
     password: faker.internet.password(),
     role: faker.random.number({min: 0, max: 3}),
+    plan: faker.random.arrayElement(["free", "premium"]),
     createdAt: new Date(),
     updatedAt: new Date(),
   });

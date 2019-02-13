@@ -16,7 +16,8 @@ module.exports = {
              username: req.body.username,
              email: req.body.email,
              password: req.body.password,
-             passwordConfirmation: req.body.passwordConfirmation
+             passwordConfirmation: req.body.passwordConfirmation,
+             password: req.body.password,
            };
 
            const msg = {
