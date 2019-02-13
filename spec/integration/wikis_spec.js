@@ -53,4 +53,26 @@ describe("Wiki", () => {
     });
   });
 
+  describe("GET /new", () => {
+        
+    it("should view new wiki page", (done) => {
+
+      request.get(`${base}new`, (err, res, body) => {
+        expect(res.statusCode).toBe(200);
+        expect(err).toBeNull();
+        expect(body).toContain("New Wiki");
+        done();
+    });
+        
+    });
+  });
+
+  // describe("POST /create", () => {
+        
+  //   it("should create a new wiki", (done) => {
+
+        
+  //   });
+  // });
+
 });
