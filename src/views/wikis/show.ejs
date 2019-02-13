@@ -4,9 +4,11 @@
     <% include ../static/partials/head.ejs %>
   </head>
   <body>
-    <% include ../static/partials/navbar.ejs %>
-
-    <main class="container">
+      <% include ../static/partials/navbar.ejs %>
+      <% include ../static/partials/messages.ejs %>
+      
+      <main class="container">
+        
       <h1><%= wiki.title %></h1>
       
       <% if(currentUser) { %>
