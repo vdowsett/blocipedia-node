@@ -1,4 +1,9 @@
+const request = require("request");
+const server = require("../../src/server");
+const base = "http://localhost:3000/wikis/";
+
 const sequelize = require("../../src/db/models/index").sequelize;
+
 const User = require("../../src/db/models").User;
 const Wiki = require("../../src/db/models").Wiki;
 
@@ -14,7 +19,7 @@ describe("Wiki", () => {
       User.create({
         username: "test-user",
         email: "test@test.com",
-        password: "test"
+        password: "test",
       })
       .then((user) => {
         this.user = user; //store the user
@@ -33,24 +38,18 @@ describe("Wiki", () => {
     });
   });
 
-  describe("#create()", () => {
-      
-    it("should create a Wiki object associated with a user", (done) => {
+  describe("GET /wikis", () => {
+        
+    it("should view Wikis and have button for new wikis", (done) => {
 
-      Wiki.create({
-        title: "Wiki title",
-        body: "wiki body",
-        private: false,
-        userId: this.user.id
-      })
-      .then((wiki) => {
-        expect(wiki.title).toBe("Wiki title");
-        done();
-      })
-      .catch((err) => {
-        console.log(err);
-        done();
-      });
+        request.get(base, (err, res, body) => {
+            expect(res.statusCode).toBe(200);
+            expect(err).toBeNull();
+            expect(body).toContain("Wikis");
+            expect(body).toContain("Wiki Example");
+            done();
+        });
+        
     });
   });
 
