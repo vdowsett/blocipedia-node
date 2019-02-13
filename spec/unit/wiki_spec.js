@@ -5,31 +5,44 @@ const Wiki = require("../../src/db/models").Wiki;
 describe("Wiki", () => {
 
   beforeEach((done) => {
-    sequelize.sync({force: true})
-    .then(() => {
-      done();
-    })
-    .catch((err) => {
-      console.log(err);
-      done();
-    });
 
+    this.user;
+    this.wiki;
+
+    sequelize.sync({force: true}).then((res) => {
+        
+      User.create({
+        username: "test-user",
+        email: "test@test.com",
+        password: "test"
+      })
+      .then((user) => {
+        this.user = user; //store the user
+        
+        Wiki.create({
+          title: "Wiki Example",
+          body: "Wiki example body",
+          private: false,
+        })
+        .then((wiki) => {
+          this.wiki = wiki; //store the wiki
+          done();
+        })
+      })
+    });
   });
 
   describe("#create()", () => {
       
     it("should create a Wiki object associated with a user", (done) => {
-      User.create({
-        username: "example",
-        email: "user@example.com",
-        password: "1234567890"
+
+      Wiki.create({
+        title: "Wiki title",
+        body: "wiki body",
+        private: false,
       })
-      .then((user) => {
-        Wiki.create({
-            title: "Wiki title",
-            body: "wiki body",
-            private: false,
-          })
+      .then((wiki) => {
+        expect(wiki.title).toBe("Wiki title");
         done();
       })
       .catch((err) => {
