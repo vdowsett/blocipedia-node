@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     userId: {
       type: DataTypes.INTEGER,
       onDelete: "CASCADE",
+      references: {
+        model: "Users", //table name
+        key: "id",
+        as: "userId",
+      }
     }
 
   }, {});
@@ -28,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
 
     Wiki.belongsTo(models.User, {
-      foreignKey: "userID",
+      foreignKey: "userId",
       onDelete: "CASCADE"
     });
     

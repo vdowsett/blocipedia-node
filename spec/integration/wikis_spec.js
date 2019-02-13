@@ -40,7 +40,7 @@ describe("Wiki", () => {
 
   describe("GET /wikis", () => {
         
-    it("should view Wikis and have button for new wikis", (done) => {
+    it("should view wiki list and have button for new a new wiki", (done) => {
 
         request.get(base, (err, res, body) => {
             expect(res.statusCode).toBe(200);
