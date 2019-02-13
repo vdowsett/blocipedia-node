@@ -19,9 +19,16 @@
           <small class="text-muted" id="titleHelp">title must be 5 or more characters in length.</small>
         </div>
         <div class="form-group">
-          <label for="description">Description</label>
-          <textarea rows="4" class="form-control" name="description" placeholder="Enter Description"><%= wiki.description %></textarea>
-          <small class="text-muted" id="descriptionHelp">description must be 10 or more characters in length.</small>
+          <label for="body">Body</label>
+          <textarea rows="4" class="form-control" name="body" placeholder="Enter Body"><%= wiki.body %></textarea>
+          <small class="text-muted" id="bodyHelp">body must be 10 or more characters in length.</small>
+        </div>
+        <div class="form-group">
+            <span>Set Privacy</span>
+            <select class="form-control" name="private" >
+              <option value="true">Make wiki private</option>
+              <option value="false" selected="selected">Make wiki public</option>
+            </select>
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
       </form>

@@ -68,41 +68,34 @@ module.exports = {
     });
   },
 
-  // destroy(req, res, next){
-  //   wikiQueries.deleteWiki(req, (err, wiki) => {
-  //     if(err){
-  //       res.redirect(err, `/wikis/${req.params.id}`)
-  //     } else {
-  //       res.redirect(303, "/wikis")
-  //     }
-  //   });
-  // },
+  destroy(req, res, next){
+    wikiQueries.deleteWiki(req, (err, wiki) => {
+      if(err){
+        res.redirect(err, `/wikis/${req.params.id}`)
+      } else {
+        res.redirect(303, "/wikis")
+      }
+    });
+  },
 
-  // edit(req, res, next){
-  //   wikiQueries.getWiki(req.params.id, (err, wiki) => {
-  //     if(err || wiki == null){
-  //       res.redirect(404, "/");
-  //     } else {
-  //       const authorized = new Authorizer(req.user, wiki).edit();
-        
-  //       if(authorized){
-  //         res.render("wikis/edit", {wiki});
-  //         } else {
-  //           req.flash("You are not authorized to do that.");
-  //           res.redirect(`/wikis/${req.params.id}`);
-  //        }
-  //     }
-  //   });
-  // },
+  edit(req, res, next){
+    wikiQueries.getWiki(req.params.id, (err, wiki) => {
+      if(err || wiki == null){
+        res.redirect(404, "/");
+      } else {
+          res.render(`wikis/edit`, {wiki});
+      }
+    });
+  },
 
-  // update(req, res, next){
-  //   wikiQueries.updateWiki(req, req.body, (err, wiki) => {
-  //     if(err || wiki == null){
-  //       res.redirect(401, `/wikis/${req.params.id}/edit`);
-  //     } else {
-  //       res.redirect(`/wikis/${req.params.id}`);
-  //     }
-  //   });
-  // }
+  update(req, res, next){
+    wikiQueries.updateWiki(req, req.body, (err, wiki) => {
+      if(err || wiki == null){
+        res.redirect(401, `/wikis/${req.params.id}/edit`);
+      } else {
+        res.redirect(`/wikis/${req.params.id}`);
+      }
+    });
+  }
 
 }

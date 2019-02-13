@@ -44,52 +44,43 @@ module.exports = {
     })
   },
 
-  // deleteWiki(req, callback){
-  //   return Wiki.findById(req.params.id)
-  //   .then((wiki) => {
-  //     const authorized = new Authorizer(req.user, wiki).destroy();
-  //     if(authorized) {
-  //       wiki.destroy()
-  //       .then((res) => {
-  //         callback(null, wiki);
-  //       });
-  //     } else {
-  //       req.flash("notice", "You are not authorized to do that.")
-  //       callback(401);
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     callback(err);
-  //   });
-  // },
+  deleteWiki(req, callback){
 
-  // updateWiki(req, updatedWiki, callback){
+    return Wiki.findById(req.params.id)
 
-  //   return Wiki.findById(req.params.id)
+    .then((wiki) => {
 
-  //   .then((wiki) => {
+        wiki.destroy()
+        .then((res) => {
+          callback(null, wiki);
+        });
 
-  //     if(!wiki){
-  //       return callback("Wiki not found");
-  //     }
+    })
+    .catch((err) => {
+      callback(err);
+    });
+  },
 
-  //     const authorized = new Authorizer(req.user, wiki).update();
+  updateWiki(req, updatedWiki, callback){
 
-  //     if(authorized) {
+    return Wiki.findById(req.params.id)
+
+    .then((wiki) => {
+
+      if(!wiki){
+        return callback("Wiki not found");
+      }
+
+      wiki.update(updatedWiki, {
+        fields: Object.keys(updatedWiki)
+      })
+      .then(() => {
+        callback(null, wiki);
+      })
+      .catch((err) => {
+        callback(err);
+      });
         
-  //       wiki.update(updatedWiki, {
-  //         fields: Object.keys(updatedWiki)
-  //       })
-  //       .then(() => {
-  //         callback(null, wiki);
-  //       })
-  //       .catch((err) => {
-  //         callback(err);
-  //       });
-  //     } else {
-  //       req.flash("notice", "You are not authorized to do that.");
-  //       callback("Forbidden");
-  //     }
-  //   });
-  // }
+    });
+  }
 }

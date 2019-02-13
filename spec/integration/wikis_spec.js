@@ -140,6 +140,53 @@ describe("Wiki", () => {
   
     });
 
+    describe("POST /wikis/:id/destroy", () => {
+      it("should delete the wiki", (done) => {
+        expect(this.wiki.id).toBe(1);
+        request.post(`${base}/${this.wiki.id}/destroy`, (err, res, body) => {
+          Wiki.findById(1)
+          .then((wiki) => {
+            expect(err).toBeNull();
+            expect(wiki).not.toBeNull();
+            done();
+          })
+        });
+      });
+    });
+
+    describe("GET /wikis/:id/edit", () => {
+      it("should render an edit view with an update form", (done) => {
+        request.get(`${base}/${this.wiki.id}/edit`, (err, res, body) => {
+          expect(err).toBeNull();
+          expect(body).not.toContain("Edit Wiki");
+          done();
+        });
+      });
+    });
+
+    describe("POST /wikis/:id/update", () => {
+      it("should update the wiki with the given values", (done) => {
+        const options = {
+          url: `${base}${this.wiki.id}/update`,
+          form: {
+            title: "Wiki Editing Example",
+            body: "changing wiki",
+            private: true,
+            userId: this.user.id
+          }
+        };
+        request.post(options, (err, res, body) => {
+          Wiki.findOne({
+            where: {id: this.wiki.id}
+          })
+          .then((wiki) => {
+            expect(wiki.title).toBe("Wiki Editing Example");
+            done();
+          });
+        });
+      });
+    });
+
   });
 
 });
