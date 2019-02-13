@@ -79,7 +79,7 @@ module.exports = {
         return callback("Wiki not found");
       }
 
-      const authorized = new Authorizer(req.user, wiki).destroy();
+      const authorized = new Authorizer(req.user, wiki).update();
 
       if(authorized) {
 
