@@ -15,26 +15,26 @@
 
             <div class="col col-lg-7">
 
-                <h4> Latest Public Wikis </h4>
-
-                List of user's public wikis
-
-                <!-- <ul class="list-unstyled">
-                    
-                    <% // if(wikis) { %>
-                    <% // wikis.forEach((wiki) => { %>
-                        <li>
-                        <a href="/wikis/<%= // wiki.id %>">
-                            <%= // wiki.title %>
-                        </a>
-                        </li>
-                    <% // }) %>
-                    <% // } %>
-                </ul> -->
+                <h4> Latest public wikis by <%= `${user.username}` %> </h4>
+                    <% if(wikis.length > 0) { %>
+                        <ul class="list-unstyled"></ul>
+                            <% wikis.forEach((wiki) => { %>
+                                <li>
+                                <a href="/wikis/<%= wiki.id %>">
+                                    <%= wiki.title %>
+                                </a>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <p>You have not created any public wikis yet. Create one now: </p>
+                        <a href="/wikis/new" class="btn btn-success">New Wiki</a>
+                    <% } %>
+                
 
                 <hr>
 
-                <h4> Latest Private Wikis </h4>
+                <h4> Latest private wikis by <%= `${user.username}` %> </h4>
 
                 List of user's private wikis
         

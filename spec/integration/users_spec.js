@@ -3,6 +3,7 @@ const server = require("../../src/server");
 const base = "http://localhost:3000/users/";
 
 const User = require("../../src/db/models").User;
+const Wiki = require("../../src/db/models").Wiki;
 
 const sequelize = require("../../src/db/models/index").sequelize;
 
@@ -123,11 +124,22 @@ describe("routes : users", () => {
   
     describe("GET /users/:id", () => {
 
+        it("should view a user profile with username", (done) => {
+
+            request.get(`${base}${this.user.id}`, (err, res, body) => {
+            expect(err).toBeNull();
+            expect(body).toContain(this.user.username);
+            done();
+            });
+    
+        });
+
         it("should present a list of public wikis a user has created", (done) => {
 
             request.get(`${base}${this.user.id}`, (err, res, body) => {
             expect(err).toBeNull();
             expect(body).toContain(this.user.username);
+            expect(body).toContain("Wiki Example for User View");
             done();
             });
     
