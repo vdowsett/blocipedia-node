@@ -43,14 +43,6 @@ module.exports = {
       });
     }, //working
 
-    upgrade(req, res, next) {
-
-    },
-
-    downgrade(req, res, next) {
-      
-    },
-
     signInView(req, res, next) {
       res.render("users/sign_in");
     }, //working
@@ -89,6 +81,28 @@ module.exports = {
         }
 
       });
-    }
+    }, //working
+
+
+
+    upgrade(req, res, next) {
+
+      //add payment integration tht has to successfully process before next step can happen
+      
+      userQueries.upgradeUser(req.params.id, (err, result) => {
+        if(err){
+          req.flash("error", err);
+          res.redirect("/");
+        } else {
+          req.flash("notice", "You've successfully upgraded your account!");
+          res.redirect("/wikis");
+        }
+      });
+
+    },
+
+    downgrade(req, res, next) {
+      
+    },
 
 }

@@ -7,6 +7,10 @@ const Wiki = require("../../src/db/models").Wiki;
 
 const sequelize = require("../../src/db/models/index").sequelize;
 
+const sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 describe("routes : users", () => {
 
     beforeEach((done) => {
@@ -23,7 +27,6 @@ describe("routes : users", () => {
           })
           .then((user) => {
             this.user = user; //store the user
-            done();
             
             Wiki.create({
               title: "Wiki Example for User View",
@@ -124,35 +127,60 @@ describe("routes : users", () => {
   
     describe("GET /users/:id", () => {
 
-        it("should view a user profile with username", (done) => {
+        beforeEach((done) => {
 
-            request.get(`${base}${this.user.id}`, (err, res, body) => {
-            expect(err).toBeNull();
-            expect(body).toContain(this.user.username);
-            done();
+            request.get({
+                url: "http://localhost:3000/auth/fake",
+                form: {
+                    role: 0,
+                    username: "test-user",
+                    email: "test@test.com",
+                    userId: this.user.id
+                }
             });
-    
+            done();
+
         });
 
-        it("should present a list of public wikis a user has created", (done) => {
+        describe("logged in user profile interactions", () => {
 
-            request.get(`${base}${this.user.id}`, (err, res, body) => {
-            expect(err).toBeNull();
-            expect(body).toContain(this.user.username);
-            expect(body).toContain("Wiki Example for User View");
-            done();
+            it("should view a user profile with username", (done) => {
+
+                request.get(`${base}${this.user.id}`, (err, res, body) => {
+                expect(err).toBeNull();
+                expect(body).toContain(this.user.username);
+                done();
+                });
+        
             });
     
+            it("should present a list of public wikis a user has created", (done) => {
+    
+                request.get(`${base}${this.user.id}`, (err, res, body) => {
+                expect(err).toBeNull();
+                expect(body).toContain(this.user.username);
+                expect(body).toContain("Wiki Example for User View");
+                done();
+                });
+        
+            });
+    
+            it("should upgrade users to premium", (done) => { 
+    
+                request.post(`${base}${this.user.id}upgrade`, (err, res, body) => {
+    
+                    expect(err).toBeNull();
+                    expect(this.user.role).toBe(1);
+                    done();
+                })
+    
+            });
+
+            //   it("should downgrade users to free", (done) => { });
         });
 
-        //   it("should upgrade users to premium", (done) => { });
-
-        //   it("should downgrade users to free", (done) => { });
-
+        
     });
-
-
-
 
 
 });

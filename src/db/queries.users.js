@@ -45,5 +45,30 @@ module.exports = {
           });
         }
       });
-    }
+  }, //working
+
+  upgradeUser(id, callback) {
+
+    return User.findById(id)
+    
+       .then((user) => {
+
+          if(!user){
+            return callback("User not found");
+          }
+
+          user.update({ role: 1 })
+          .then((res) => {
+            callback(null, user);
+          })
+          .catch((err) => {
+            callback(err);
+          });
+
+        })
+       .catch((err) => {
+         callback(err);
+       });
+
+  }
   }

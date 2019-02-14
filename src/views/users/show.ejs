@@ -55,11 +55,11 @@
                             
                             <hr>
                                 
-                            <% if(user.role === 0) { %>
+                            <% if(currentUser && user.role === 0) { %>
                             <div class="form-group">
                                 <h5 class="card-text">Upgrade Membership Plan</h5>
                                 <p>Upgrade your account to access premium benefits such as private wikis</p>
-                                <form style="display:initial" action="/users/upgrade" method="post">
+                                <form style="display:initial" action="/users/<%= currentUser.id %>/upgrade" method="post">
                                     <button type="submit" class="btn btn-danger">Upgrade</button>
                                 </form>
                             <% } else if(user.role === 1) { %>
