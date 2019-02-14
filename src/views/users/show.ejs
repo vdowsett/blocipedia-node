@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../static/partials/head.ejs %>
+  </head>
+  <body>
+        <% include ../static/partials/navbar.ejs %>
+        <% include ../static/partials/messages.ejs %>
+        
+        <main class="container">
+      
+      <h1><%= `${user.email}'s profile` %></h1>
+
+      <hr>
+
+      <h2> Latest Public Wikis </h2>
+
+      <ul class="list-unstyled">
+          
+        <% if(wikis) { %>
+          <% wikis.forEach((wiki) => { %>
+            <li>
+              <a href="/wikis/<%= wiki.id %>">
+                <%= wiki.title %>
+              </a>
+            </li>
+          <% }) %>
+        <% } %>
+      </ul>
+
+      <hr>
+
+      <h2> <%= `${user.email}'s membership` %> </h2>
+
+      <b>Current membership enrollment: <% if(user.role === 0) { %> Free plan <% } else { %> Premium plan <% } %>
+    
+        <% if(user.role === 0) { %>
+        <div class="form-group">
+            <h3>Upgrade Membership Plan</h3>
+            <input type="submit" value="Upgrade" class="btn btn-primary"/>
+        </div>
+        <% } else if(user.role === 1) { %>
+        <div class="form-group">
+            <h3>Downgrade Membership Plan</h3>
+            <input type="submit" value="Downgrade" class="btn btn-primary"/>
+        </div>
+        <% } %>
+
+      <hr>
+
+    </main>
+
+    <% include ../static/partials/baseScripts.ejs %>
+
+  </body>
+</html>

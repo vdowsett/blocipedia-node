@@ -14,7 +14,6 @@ module.exports = {
       email: newUser.email,
       password: hashedPassword,
       role: newUser.role,
-      plan: newUser.plan
     })
     .then((user) => {
       callback(null, user);
