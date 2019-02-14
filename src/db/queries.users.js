@@ -21,18 +21,28 @@ module.exports = {
     .catch((err) => {
       callback(err);
     })
-  },
+  }, //working
 
   getUser(id, callback){
     
        let result = {};
+
        User.findById(id)
        .then((user) => {
-            callback(null, result); 
+            
+        if(!user) {
+          callback(404);
+        } else {
+
+          result["user"] = user;
+          callback(null, result);
+
+        }
+
         })
         .catch((err) => {
             callback(err);
         });
-    }
+  }
 
 }

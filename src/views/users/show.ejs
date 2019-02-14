@@ -9,42 +9,72 @@
         
         <main class="container">
       
-      <h1><%= `${user.email}'s profile` %></h1>
+      <h1 class="display-3"><%= `${user.username}'s profile` %></h1>
+      
+      <div class="row">
 
-      <hr>
+            <div class="col col-lg-7">
 
-      <h2> Latest Public Wikis </h2>
+                <h4> Latest Public Wikis </h4>
 
-      <ul class="list-unstyled">
-          
-        <% if(wikis) { %>
-          <% wikis.forEach((wiki) => { %>
-            <li>
-              <a href="/wikis/<%= wiki.id %>">
-                <%= wiki.title %>
-              </a>
-            </li>
-          <% }) %>
-        <% } %>
-      </ul>
+                List of user's public wikis
 
-      <hr>
+                <!-- <ul class="list-unstyled">
+                    
+                    <% // if(wikis) { %>
+                    <% // wikis.forEach((wiki) => { %>
+                        <li>
+                        <a href="/wikis/<%= // wiki.id %>">
+                            <%= // wiki.title %>
+                        </a>
+                        </li>
+                    <% // }) %>
+                    <% // } %>
+                </ul> -->
 
-      <h2> <%= `${user.email}'s membership` %> </h2>
+                <hr>
 
-      <b>Current membership enrollment: <% if(user.role === 0) { %> Free plan <% } else { %> Premium plan <% } %>
-    
-        <% if(user.role === 0) { %>
-        <div class="form-group">
-            <h3>Upgrade Membership Plan</h3>
-            <input type="submit" value="Upgrade" class="btn btn-primary"/>
-        </div>
-        <% } else if(user.role === 1) { %>
-        <div class="form-group">
-            <h3>Downgrade Membership Plan</h3>
-            <input type="submit" value="Downgrade" class="btn btn-primary"/>
-        </div>
-        <% } %>
+                <h4> Latest Private Wikis </h4>
+
+                List of user's private wikis
+        
+              </div>
+        
+              <div class="col col-lg-4">
+                  <div class="card">
+                    <img src="https://www.fillmurray.com/640/360" class="card-img-top" alt="placeholder">
+                    <div class="p-3">
+                            <h4 class="card-title"> <%= `${user.username}'s Membership` %> </h4>
+                            <p class="card-text" >Current membership enrollment:<br/>
+                                <% if(user.role === 0) { %>
+                                    <b>Free Plan</b> 
+                                <% } else { %> 
+                                    <b>Premium Plan</b> 
+                                <% } %>
+                            </p>
+                            
+                            <hr>
+                                
+                            <% if(user.role === 0) { %>
+                            <div class="form-group">
+                                <h5 class="card-text">Upgrade Membership Plan</h5>
+                                <p>Upgrade your account to access premium benefits such as private wikis</p>
+                                <input type="submit" value="Upgrade" class="btn btn-primary"/>
+                            <% } else if(user.role === 1) { %>
+                                <h5>Downgrade Membership Plan</h5>
+                                <input type="submit" value="Downgrade" class="btn btn-primary"/>
+                            </div>
+                            <% } %>
+                    </div>
+                  </div>
+              </div>
+
+
+      </div>
+
+      
+
+      
 
       <hr>
 
