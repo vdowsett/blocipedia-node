@@ -1,8 +1,8 @@
 const userQueries = require("../db/queries.users.js");
 const passport = require("passport");
-const sgMail = require('@sendgrid/mail');
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const emails = require('../emails/sign_up');
+const payments = require('../payments/payments');
 
 module.exports = {
 
@@ -10,37 +10,67 @@ module.exports = {
       res.render("users/sign_up");
     },
 
+    authenticate(req, res, next) {
+	    if (!req.user){
+	      req.flash("notice", "You need to sign in or sign up before continuing.")
+	      return res.redirect("/users/login");
+	    } else {
+	      next();
+	    }
+    },
+
     create(req, res, next){
       
-           let newUser = {
-             username: req.body.username,
-             email: req.body.email,
-             password: req.body.password,
-             passwordConfirmation: req.body.passwordConfirmation,
-             password: req.body.password,
-           };
+      let newUser = {
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        passwordConfirmation: req.body.passwordConfirmation,
+        plan: req.body.plan,
+      };
 
-           const msg = {
-            to: newUser.email,
-            from: 'vdowsett@gmail.com',
-            subject: 'Welcome to Blocipedia',
-            text: 'Did you know? Every citizen of Kentucky is required by law to take a bath once a year.',
-            html: '<strong>Did you know? </strong> Every citizen of Kentucky is required by law to take a bath once a year.',
-          };
-           
-           userQueries.createUser(newUser, (err, user) => {
-             if(err){
-               req.flash("error", err);
-               console.log(err);
-               res.redirect("/users/sign_up");
-             } else {
-               passport.authenticate("local")(req, res, () => {
-                sgMail.send(msg);
-                req.flash("notice", "You've successfully signed up!");
-                res.redirect("/");
-               })
-             }
-           });
+      payments.premiumPayment(newUser, (err, payment) => {
+
+        if(err) {
+
+          req.flash("error" ,err);
+          res.redirect("users/signup");
+          
+        } else {
+
+          userQueries.createUser(newUser, (err, user) => {
+
+            if(err){
+    
+              req.flash("error", err);
+              res.redirect("/users/sign_up");
+    
+            } else {
+    
+              passport.authenticate("local")(req, res, () => { 
+    
+              emails.signUpEmail();
+    
+              req.flash("notice", "You've successfully signed up!");
+              res.redirect("/");
+              })
+            }
+          });
+
+        }
+      })
+
+      
+    },
+
+
+
+    upgrade(req, res, next) {
+
+    },
+
+    downgrade(req, res, next) {
+      
     },
 
     signInView(req, res, next) {
@@ -68,6 +98,6 @@ module.exports = {
       req.flash("notice", "You've successfully signed out!");
       res.redirect("/");
 
-    }
+    },
 
 }
