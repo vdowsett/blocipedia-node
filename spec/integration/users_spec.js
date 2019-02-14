@@ -8,8 +8,6 @@ const sequelize = require("../../src/db/models/index").sequelize;
 
 const sgMail = require('@sendgrid/mail');
 
-
-
 describe("routes : users", () => {
 
   beforeEach((done) => {
@@ -35,6 +33,8 @@ describe("routes : users", () => {
         done();
       });
     });
+
+    //   describe("POST /users/signUp + payment", () => { });
 
   });
 
@@ -133,5 +133,63 @@ describe("routes : users", () => {
 
 //   describe("GET /users/signOut", () => { });
   
-//   describe("GET /users/:id", () => { });
+  describe("GET /users/:id", () => {
+
+    beforeEach((done) => {
+
+        this.user;
+        this.wiki;
+    
+        sequelize.sync({force: true}).then((res) => {
+            
+          User.create({
+            username: "test-user",
+            email: "test@test.com",
+            password: "test",
+          })
+          .then((user) => {
+            this.user = user; //store the user
+            done();
+            
+            Wiki.create({
+              title: "Wiki Example for User View",
+              body: "Wiki example body",
+              private: false,
+              userId: this.user.id
+            })
+            .then((wiki) => {
+              this.wiki = wiki; //store the wiki
+              done();
+            })
+          })
+          .catch((err) => {
+            done();
+          });
+        });
+    });
+
+    describe("GET /users/:id view wikis", () => {
+
+        it("should present a list of public wikis a user has created", (done) => {
+
+            request.get(`${base}${this.user.id}`, (err, res, body) => {
+              
+              expect(body).toContain("Wiki Example for User View");
+              done();
+            });
+      
+          });
+
+    });
+
+    //   describe("POST /users/:id/upgrade", () => { });
+
+    //   describe("GET /users/:id/downgrade", () => { });
+
+  });
+
+
+
+
+
 });
