@@ -2,10 +2,14 @@ const userQueries = require("../db/queries.users.js");
 const passport = require("passport");
 
 const sgMail = require('@sendgrid/mail');
-
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-module.exports = {
+const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
+const keySecret = process.env.STRIPE_SECRET_KEY;
+
+var stripe = require("stripe")(keySecret);
+
+const self = module.exports = {
 
     signUp(req, res, next){
       res.render("users/sign_up");
@@ -83,22 +87,39 @@ module.exports = {
       });
     }, //working
 
-
-
     upgrade(req, res, next) {
 
-      //add payment integration tht has to successfully process before next step can happen
-      
+      const token = req.body.stripeToken;
+      const email = req.body.stripeEmail
+
+      stripe.customers.create({
+        email: email,
+        source: "tok_mastercard"
+      })
+      .then((customer) => {
+        stripe.charges.create({
+          customer: customer.id,
+          amount: 1499,
+          currency: "usd",
+          source: token,
+          description: "Blocipedia Premium Plan",
+        })
+      })
+      .then((charge) => {
+        next();
+      });
+
       userQueries.upgradeUser(req.params.id, (err, result) => {
         if(err){
           req.flash("error", err);
-          res.redirect("/");
+          res.redirect(req.headers.referer);
         } else {
           req.flash("notice", "You've successfully upgraded your account!");
-          res.redirect("/wikis");
+          res.redirect(req.headers.referer);
         }
-      });
-
+      })
+      
+      
     },
 
     downgrade(req, res, next) {

@@ -45,6 +45,7 @@
                     <img src="https://www.fillmurray.com/640/360" class="card-img-top" alt="placeholder">
                     <div class="p-3">
                             <h4 class="card-title"> <%= `${user.username}'s Membership` %> </h4>
+                            <% if(currentUser ) { %>
                             <p class="card-text" >Current membership enrollment:<br/>
                                 <% if(user.role === 0) { %>
                                     <b>Free Plan</b> 
@@ -52,17 +53,15 @@
                                     <b>Premium Plan</b> 
                                 <% } %>
                             </p>
-                            
+                            <% } %>
                             <hr>
                                 
                             <% if(currentUser && user.role === 0) { %>
                             <div class="form-group">
                                 <h5 class="card-text">Upgrade Membership Plan</h5>
                                 <p>Upgrade your account to access premium benefits such as private wikis</p>
-                                <form style="display:initial" action="/users/<%= currentUser.id %>/upgrade" method="post">
-                                    <button type="submit" class="btn btn-success">Upgrade</button>
-                                </form>
-                            <% } else if(user.role === 1) { %>
+                                <% include ../static/partials/upgradeCheckout.ejs %>
+                            <% } else if(currentUser && user.role === 1) { %>
                                 <h5>Downgrade Membership Plan</h5>
                                 <form style="display:initial" action="/users/<%= currentUser.id %>/downgrade" method="post">
                                     <button type="submit" class="btn btn-secondary">Downgrade</button>
