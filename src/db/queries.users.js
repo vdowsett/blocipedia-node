@@ -70,5 +70,30 @@ module.exports = {
          callback(err);
        });
 
+  }, //working
+
+  downgradeUser(id, callback) {
+
+    return User.findById(id)
+    
+       .then((user) => {
+
+          if(!user){
+            return callback("User not found");
+          }
+
+          user.update({ role: 0 })
+          .then((res) => {
+            callback(null, user);
+          })
+          .catch((err) => {
+            callback(err);
+          });
+
+        })
+       .catch((err) => {
+         callback(err);
+       });
+
   }
   }

@@ -60,12 +60,12 @@
                                 <h5 class="card-text">Upgrade Membership Plan</h5>
                                 <p>Upgrade your account to access premium benefits such as private wikis</p>
                                 <form style="display:initial" action="/users/<%= currentUser.id %>/upgrade" method="post">
-                                    <button type="submit" class="btn btn-danger">Upgrade</button>
+                                    <button type="submit" class="btn btn-success">Upgrade</button>
                                 </form>
                             <% } else if(user.role === 1) { %>
                                 <h5>Downgrade Membership Plan</h5>
-                                <form style="display:initial" action="/users/upgrade" method="post">
-                                    <button type="submit" class="btn btn-danger">Downgrade</button>
+                                <form style="display:initial" action="/users/<%= currentUser.id %>/downgrade" method="post">
+                                    <button type="submit" class="btn btn-secondary">Downgrade</button>
                                 </form>
                             </div>
                             <% } %>

@@ -102,6 +102,18 @@ module.exports = {
     },
 
     downgrade(req, res, next) {
+
+      //add refund integration that has to successfully process before next step can happen
+      
+      userQueries.downgradeUser(req.params.id, (err, result) => {
+        if(err){
+          req.flash("error", err);
+          res.redirect("/");
+        } else {
+          req.flash("notice", "You've successfully downgraded your account!");
+          res.redirect("/wikis");
+        }
+      });
       
     },
 

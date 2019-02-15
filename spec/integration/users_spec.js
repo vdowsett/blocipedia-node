@@ -176,7 +176,16 @@ describe("routes : users", () => {
     
             });
 
-            //   it("should downgrade users to free", (done) => { });
+            it("should downgrade users to free", (done) => { 
+    
+                request.post(`${base}${this.user.id}downgrade`, (err, res, body) => {
+    
+                    expect(err).toBeNull();
+                    expect(this.user.role).toBe(0);
+                    done();
+                })
+    
+            });
         });
 
         
