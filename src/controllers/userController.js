@@ -9,7 +9,7 @@ module.exports = {
 
     signUp(req, res, next){
       res.render("users/sign_up");
-    },
+    }, //working
 
     create(req, res, next){
       
@@ -41,19 +41,11 @@ module.exports = {
           })
         }
       });
-    },
-
-    upgrade(req, res, next) {
-
-    },
-
-    downgrade(req, res, next) {
-      
-    },
+    }, //working
 
     signInView(req, res, next) {
       res.render("users/sign_in");
-    },
+    }, //working
 
     signIn(req, res, next) {
       
@@ -68,7 +60,7 @@ module.exports = {
         }
       })
 
-    },
+    }, //working
 
     signOut(req, res, next) {
       
@@ -76,6 +68,53 @@ module.exports = {
       req.flash("notice", "You've successfully signed out!");
       res.redirect("/");
 
+    }, //working
+
+    show(req, res, next){
+      userQueries.getUser(req.params.id, (err, result) => {
+          
+        if(err || result.user === undefined){
+          req.flash("notice", "No user found with that ID.");
+          res.redirect("/");
+        } else {
+          res.render("users/show", {...result});
+        }
+
+      });
+    }, //working
+
+
+
+    upgrade(req, res, next) {
+
+      //add payment integration tht has to successfully process before next step can happen
+      
+      userQueries.upgradeUser(req.params.id, (err, result) => {
+        if(err){
+          req.flash("error", err);
+          res.redirect("/");
+        } else {
+          req.flash("notice", "You've successfully upgraded your account!");
+          res.redirect("/wikis");
+        }
+      });
+
+    },
+
+    downgrade(req, res, next) {
+
+      //add refund integration that has to successfully process before next step can happen
+      
+      userQueries.downgradeUser(req.params.id, (err, result) => {
+        if(err){
+          req.flash("error", err);
+          res.redirect("/");
+        } else {
+          req.flash("notice", "You've successfully downgraded your account!");
+          res.redirect("/wikis");
+        }
+      });
+      
     },
 
 }
