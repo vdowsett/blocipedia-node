@@ -9,7 +9,7 @@ const keySecret = process.env.STRIPE_SECRET_KEY;
 
 var stripe = require("stripe")(keySecret);
 
-module.exports = {
+const self = module.exports = {
 
     signUp(req, res, next){
       res.render("users/sign_up");
@@ -89,7 +89,6 @@ module.exports = {
 
     upgrade(req, res, next) {
 
-      const user = req.user;
       const token = req.body.stripeToken;
       const email = req.body.stripeEmail
 
@@ -105,22 +104,19 @@ module.exports = {
           source: token,
           description: "Blocipedia Premium Plan",
         })
-        .then((charge) => {
-            userQueries.upgradeUser(req.params.id, (err, result) => {
-              if(err){
-                req.flash("error", err);
-                res.redirect(req.headers.referer);
-              } else {
-                req.flash("notice", "You've successfully upgraded your account!");
-                res.redirect(req.headers.referer);
-              }
-            });
+      })
+      .then((charge) => {
+        next();
+      });
 
-        })
-        .catch((err) => {
-          req.flash("err", err);
+      userQueries.upgradeUser(req.params.id, (err, result) => {
+        if(err){
+          req.flash("error", err);
           res.redirect(req.headers.referer);
-        })
+        } else {
+          req.flash("notice", "You've successfully upgraded your account!");
+          res.redirect(req.headers.referer);
+        }
       })
       
       
