@@ -1,5 +1,8 @@
 require("dotenv").config();
 
+const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
+const keySecret = process.env.STRIPE_SECRET_KEY;
+
 const path = require("path");
 const viewsFolder = path.join(__dirname, "..", "views");
 const bodyParser = require("body-parser");
@@ -8,6 +11,7 @@ const session = require("express-session");
 const flash = require("express-flash");
 const passportConfig = require("./passport-config");
 const logger = require('morgan');
+const stripe = require("stripe")(keySecret);
 
 module.exports = {
 init(app, express){
