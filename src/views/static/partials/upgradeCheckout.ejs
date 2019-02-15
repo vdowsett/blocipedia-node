@@ -1,15 +1,4 @@
-<form action="/users/<%= currentUser.id %>/upgrade" method="POST">
-        <script
-          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-          data-key="pk_test_TYooMQauvdEDq54NiTphI7jx"
-          data-amount="1499"
-          data-name="Stripe.com"
-          data-description="Blocipedia Premium Plan"
-          data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-          data-locale="auto"
-          data-zip-code="true">
-        </script>
-      </form>
+
 
 <form style="display:initial" action="/users/<%= currentUser.id %>/upgrade" method="post">
     
@@ -24,7 +13,7 @@
         data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
         data-locale="auto"
         data-zip-code="true"/>
-        
+
         <script src="https://checkout.stripe.com/v2/checkout.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 
