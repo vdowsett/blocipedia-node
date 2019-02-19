@@ -22,13 +22,15 @@
           <textarea rows="4" class="form-control" name="body" placeholder="Enter Body"><%= wiki.body %></textarea>
           <small class="text-muted" id="bodyHelp">body must be 10 or more characters in length.</small>
         </div>
+        <% if ( currentUser && ( currentUser.role == 1 ) && (currentUser.id == wiki.userId )) { %> 
         <div class="form-group">
-            <span>Set Privacy</span>
-            <select class="form-control" name="private" >
-              <option value="true">Make wiki private</option>
-              <option value="false" selected="selected">Make wiki public</option>
-            </select>
+          <span>Set Privacy</span>
+          <select class="form-control" name="private" >
+            <option value="true">Make wiki private</option>
+            <option value="false" selected="selected">Make wiki public</option>
+          </select>
         </div>
+        <% } %>
         <button type="submit" class="btn btn-primary">Update</button>
       </form>
     </main>

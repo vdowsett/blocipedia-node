@@ -34,6 +34,7 @@ module.exports = class ApplicationPolicy {
     }
     
     edit() {
+        
         return this.record && this.new();
     }
 
