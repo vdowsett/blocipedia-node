@@ -101,5 +101,35 @@ module.exports = {
     }
         
     });
+  },
+
+  updatePrivate(req, callback){
+
+    return Wiki.findById(req.params.id)
+
+    .then((wiki) => {
+
+      if(!wiki){
+        return callback("Wiki not found");
+      }
+
+      const authorized = new Authorizer(req.user, wiki).update();
+
+      if(authorized) {
+
+        if (wiki.private === false) {
+          wiki.update({private:true}, {fields: ['private']})
+          .then((res) => {
+            callback(null, wiki);
+          });
+        } else {
+          wiki.update({private:false}, {fields: ['private']})
+          .then((res) => {
+            callback(null, wiki);
+          });
+        }
+
+      }
+    })
   }
 }
