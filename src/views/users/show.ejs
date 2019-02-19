@@ -15,29 +15,35 @@
 
             <div class="col col-lg-7">
 
-                <h4> Latest public wikis by <%= `${user.username}` %> </h4>
+                
                     <% if(wikis.length > 0) { %>
-                        <ul class="list-unstyled"></ul>
+
+                    <h4> Latest public wikis by <%= `${user.username}` %> </h4>
+                    <ul class="list-unstyled"></ul>
                             <% wikis.forEach((wiki) => { %>
-                                <li>
-                                <a href="/wikis/<%= wiki.id %>">
-                                    <%= wiki.title %>
-                                </a>
-                                </li>
+                                <% if(wiki.private === false) { %>
+                                    <li> <a href="/wikis/<%= wiki.id %>"> <%= wiki.title %> </a> </li>
+                                <% } %>
                             <% }) %>
-                        </ul>
+                    </ul>
+                    
+                    <hr/>
+
+                    <h4> Latest private wikis by <%= `${user.username}` %> </h4>
+                    <ul class="list-unstyled"></ul>
+                            <% wikis.forEach((wiki) => { %>
+                                <% if(wiki.private === true) { %>
+                                    <li> <a href="/wikis/<%= wiki.id %>"> <%= wiki.title %> </a> </li>
+                                <% } %>
+                            <% }) %>
+                    </ul>
                     <% } else { %>
                         <p>You have not created any public wikis yet. Create one now: </p>
                         <a href="/wikis/new" class="btn btn-success">New Wiki</a>
                     <% } %>
-                
-
+                    
                 <hr>
-
-                <h4> Latest private wikis by <%= `${user.username}` %> </h4>
-
-                List of user's private wikis
-        
+                
               </div>
         
               <div class="col col-lg-4">
@@ -74,13 +80,7 @@
 
 
       </div>
-
       
-
-      
-
-      <hr>
-
     </main>
 
     <% include ../static/partials/baseScripts.ejs %>
