@@ -37,18 +37,10 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "CASCADE"
     });
 
-    Wiki.addScope("lastFivePublic", (userId) => {
+    Wiki.addScope("lastTen", (userId) => {
       return {
-        where: { userId: userId, private: false },
-        limit: 5,
-        order: [["createdAt", "DESC"]]
-      }
-    });
-
-    Wiki.addScope("lastFivePrivate", (userId) => {
-      return {
-        where: { userId: userId, private: true },
-        limit: 5,
+        where: { userId: userId },
+        limit: 10,
         order: [["createdAt", "DESC"]]
       }
     });
