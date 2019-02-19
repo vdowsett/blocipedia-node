@@ -26,13 +26,9 @@ module.exports = {
     }
   },
 
-  
-
   create(req, res, next){
 
     const authorized = new Authorizer(req.user).create();
-
-    console.log(req.body.private);
 
     setPrivate = (privacyInput) => {
 
@@ -132,6 +128,19 @@ module.exports = {
         }
       });
       
-  }
+  },
+
+  private(req, res, next) {
+
+    wikiQueries.updatePrivate(req, (err, wiki) => {
+      if(err){
+        req.flash("notice", "Privacy update failed");
+        res.redirect(401, `/wikis/${req.params.id}`)
+      } else {
+        req.flash("notice", "Privacy update success");
+        res.redirect(`/wikis/${req.params.id}`);
+      }
+    });
+  },
 
 }
