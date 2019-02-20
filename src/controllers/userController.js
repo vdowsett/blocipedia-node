@@ -133,7 +133,7 @@ const self = module.exports = {
           res.redirect(req.headers.referer);
         } else {
           req.flash("notice", "You've successfully downgraded your account!");
-          res.redirect(req.headers.referer);
+          res.redirect(`/users/${req.params.id}`);
         }
       });
       
