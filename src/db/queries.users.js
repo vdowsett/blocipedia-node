@@ -1,5 +1,6 @@
 const User = require("./models").User;
 const Wiki = require("./models").Wiki;
+const wikiQueries = require("../db/queries.wikis.js");
 
 const bcrypt = require("bcryptjs");
 
@@ -74,26 +75,32 @@ module.exports = {
 
   downgradeUser(id, callback) {
 
-    return User.findById(id)
-    
-       .then((user) => {
+    return User.findById(id, {
+      include: [{
+        model: Wiki,
+        as: "wikis"
+      }]
+    })
+    .then((user) => {
 
-          if(!user){
-            return callback("User not found");
-          }
+      if(!user){
+        return callback("User not found");
+      };
 
-          user.update({ role: 0 })
-          .then((res) => {
-            callback(null, user);
-          })
-          .catch((err) => {
-            callback(err);
-          });
+      if(user.wikis.length > 0) {
+        user.wikis.forEach((wiki) => { 
+          wiki.update( {private:false} ).then(() => { }).catch((err) => { });
+        });
+      };
+      
+      user.update( { role: 0 } ).then(() => { }).catch((err) => { });
 
-        })
-       .catch((err) => {
-         callback(err);
-       });
+      callback(null, user);
+
+    })
+    .catch((err) => {
+      callback(err);
+    });
 
   }
-  }
+}
