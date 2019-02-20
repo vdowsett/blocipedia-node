@@ -129,7 +129,6 @@ const self = module.exports = {
       userQueries.downgradeUser(req.params.id, (err, result) => {
         if(err){
           req.flash("error", err);
-          console.log(err);
           res.redirect(req.headers.referer);
         } else {
           req.flash("notice", "You've successfully downgraded your account!");

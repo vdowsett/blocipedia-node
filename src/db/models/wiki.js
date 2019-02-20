@@ -37,6 +37,11 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "CASCADE"
     });
 
+    Wiki.belongsToMany(models.User, { 
+      through: 'Collaborator', 
+      foreignKey: 'wikiId' 
+    });
+
     Wiki.addScope("lastTen", (userId) => {
       return {
         where: { userId: userId },
@@ -45,6 +50,12 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
     
+  };
+
+    //a function to return all associated collaborators of a wiki
+
+  Wiki.prototype.getCollaboratorsFor = function(id){
+    return this.collaborators.find((collaborator) => { return collaborator.wikiId == id });
   };
 
   return Wiki;
