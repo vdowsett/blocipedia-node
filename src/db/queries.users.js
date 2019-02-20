@@ -90,22 +90,12 @@ module.exports = {
         return callback("User not found");
       }
       
-      user.update( { role: 0 } )
+      user.update( { role: 0 } ).then(() => { }).catch((err) => { });
 
-      .then((res) => {
-
-        res.wikis.forEach((wiki) => { 
-          wiki.update({private:false})
-          .then((res) => {
-            callback(null, res);
-          })
-          .catch((err) => { 
-            callback(err)
-          })
-        })
-        callback(null, res);
-        
-      })
+      user.wikis.forEach((wiki) => { 
+        wiki.update({private:false}).then(() => { }).catch((err) => { });
+      });
+      callback(null, user);
     })
     .catch((err) => {
       callback(err);
