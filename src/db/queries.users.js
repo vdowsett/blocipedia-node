@@ -95,7 +95,9 @@ module.exports = {
       user.wikis.forEach((wiki) => { 
         wiki.update({private:false}).then(() => { }).catch((err) => { });
       });
+
       callback(null, user);
+      
     })
     .catch((err) => {
       callback(err);
