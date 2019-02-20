@@ -78,26 +78,25 @@ module.exports = {
     return User.findById(id, {
       include: [{
         model: Wiki,
-        as: "wikis",
-        where: {
-          private: true
-        }
+        as: "wikis"
       }]
     })
     .then((user) => {
 
       if(!user){
         return callback("User not found");
-      }
+      };
+
+      if(user.wikis.length > 0) {
+        user.wikis.forEach((wiki) => { 
+          wiki.update( {private:false} ).then(() => { }).catch((err) => { });
+        });
+      };
       
       user.update( { role: 0 } ).then(() => { }).catch((err) => { });
 
-      user.wikis.forEach((wiki) => { 
-        wiki.update({private:false}).then(() => { }).catch((err) => { });
-      });
-
       callback(null, user);
-      
+
     })
     .catch((err) => {
       callback(err);
