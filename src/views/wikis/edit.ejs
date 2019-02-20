@@ -33,17 +33,25 @@
             <option value="false" selected="selected">Make wiki public</option>
           </select>
         </div>
-        
-        <div class="form-group">
-          <span>Add Wiki Collaborator</span>
-          <label for="collaboratorEmail">Collaborator Email</label>
-          <input value="<%= collaborator.email %>" type="text" class="form-control" name="collaboratorEmail" aria-describedby="titleHelp" placeholder="Enter Collaborator Email">
-          <small class="text-muted" id="collaboratorEmailHelp">must be a valid email address</small>
-        </div>
         <% } %>
 
         <button type="submit" class="btn btn-primary">Update</button>
       </form>
+
+      <hr/>
+      
+      <% if ( currentUser && ( currentUser.role == 1 ) && (currentUser.id == wiki.userId )) { %> 
+        <form action="/wikis/<%= wiki.id %>/addCollaborator" method="post">
+          <div class="form-group">
+            <span>Add Wiki Collaborator</span>
+            <label for="collaboratorEmail">Collaborator Email</label>
+            <input value="<%= collaborator.email %>" type="text" class="form-control" name="collaboratorEmail" aria-describedby="titleHelp" placeholder="Enter Collaborator Email">
+            <small class="text-muted" id="collaboratorEmailHelp">must be a valid email address</small>
+          </div>
+          <button type="submit" class="btn btn-primary"> Add Collaborator</button>
+        </form>
+      <% } %>
+
     </main>
 
     <% include ../static/partials/baseScripts.ejs %>
