@@ -2,7 +2,7 @@ const wikiQueries = require("../db/queries.wikis.js");
 
 const Authorizer = require("../policies/wiki");
 
-const markdown = require( "markdown" ).markdown;
+const markdown = require("markdown").markdown;
 
 module.exports = {
 
@@ -78,6 +78,7 @@ module.exports = {
         res.render( "wikis/show", 
           {
             wiki: {
+              id: wiki.id,
               title: wiki.title,
               body: markdown.toHTML(wiki.body)
             }
