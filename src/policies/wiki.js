@@ -11,4 +11,8 @@ module.exports = class WikiPolicy extends ApplicationPolicy {
         }
         
     }
+
+    private() {
+        return this._isPremium();
+    }
 }

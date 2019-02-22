@@ -133,15 +133,28 @@ module.exports = {
 
   private(req, res, next) {
 
-    wikiQueries.updatePrivate(req, (err, wiki) => {
-      if(err){
-        req.flash("notice", "Privacy update failed");
-        res.redirect(401, `/wikis/${req.params.id}`)
-      } else {
-        req.flash("notice", "Privacy update success");
-        res.redirect(`/wikis/${req.params.id}`);
-      }
-    });
-  },
+    const authorized = new Authorizer(req.user).private();
 
+          if(authorized) {
+
+            wikiQueries.updatePrivate(req, (err, wiki) => {
+              if(err){
+                req.flash("notice", "Privacy update failed");
+                res.redirect(401, `/wikis/${req.params.id}`)
+              } else {
+                req.flash("notice", "Privacy update success");
+                res.redirect(`/wikis/${req.params.id}`);
+              }
+            });
+
+          } else {
+
+            req.flash("notice", "You are not authorized to do that.");
+            res.redirect("/wikis");
+
+          }
+
+    
+  },
+ 
 }
