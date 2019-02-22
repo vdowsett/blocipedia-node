@@ -1,0 +1,19 @@
+<div class="card">
+    <div class="card-body">
+
+        <% if(wikis.length > 0) { %>
+
+            <h4> Latest Wikis </h4>
+            <ul class="list-unstyled"></ul>
+                    <% wikis.forEach((wiki) => { %>
+                        <% if(wiki.private === false) { %>
+                            <li> <a href="/wikis/<%= wiki.id %>"> <%= wiki.title %> </a> </li>
+                        <% } %>
+                    <% }) %>
+            </ul>
+
+        <% } %>
+
+    </div>
+</div>
+          

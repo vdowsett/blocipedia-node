@@ -36,7 +36,7 @@ module.exports = {
           callback(404);
         } else {
           result["user"] = user;
-          Wiki.scope({method: ["lastTen", id]}).all()
+          Wiki.scope({method: ["lastTenPerUser", id]}).all()
           .then((wikis) => {
             result["wikis"] = wikis;
             callback(null, result);

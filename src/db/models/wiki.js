@@ -42,9 +42,17 @@ module.exports = (sequelize, DataTypes) => {
       as: "collaborators" 
     });
 
-    Wiki.addScope("lastTen", (userId) => {
+    Wiki.addScope("lastTenPerUser", (userId) => {
       return {
         where: { userId: userId },
+        limit: 10,
+        order: [["createdAt", "DESC"]]
+      }
+    });
+
+    Wiki.addScope("lastTenPublic", () => {
+      return {
+        where: { private: false },
         limit: 10,
         order: [["createdAt", "DESC"]]
       }
