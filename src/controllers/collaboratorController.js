@@ -6,46 +6,56 @@ const passport = require("passport");
 
 module.exports = {
   
-create(req, res, next) { 
+  create(req, res, next) { 
 
-  const email = req.body.collaboratorEmail;
-  const wikiId = req.params.id;
+    const email = req.body.collaboratorEmail;
+    const wikiId = req.params.id;
 
-  console.log("balls: " + email);
+    userQueries.emailLookup(email, (err, user) => {
+      if(err) {
+        req.flash("notice", "User not found", err);
+        res.redirect(req.headers.referer);
+      } else {
 
-  userQueries.emailLookup(email, (err, user) => {
-    if(err) {
-      req.flash("notice", "User not found", err);
-      res.redirect(req.headers.referer);
-    } else {
+        wikiQueries.getWiki(wikiId, (err, wiki) => {
+          if(err){
+            req.flash("notice", "Wiki not found", err)
+            res.redirect(req.headers.referer);
+          } else {
 
-      wikiQueries.getWiki(wikiId, (err, wiki) => {
-        if(err){
-          req.flash("notice", "Wiki not found", err)
-          res.redirect(req.headers.referer);
-        } else {
-
-          let newCollaborator = {
-            wikiId: wiki.id,
-            collabId: user.id
-          }
-
-          collaboratorQueries.createCollaborator(newCollaborator, (err, collaborator) => {
-            if(err){
-              req.flash("notice", "Collaborator not created", err);
-              res.redirect(req.headers.referer);
-            } else {
-              req.flash("notice", "Collaborator successfully created");
-              res.redirect(req.headers.referer);
+            let newCollaborator = {
+              wikiId: wiki.id,
+              collabId: user.id
             }
-          });
-          
-        }
-      });
 
-    }
-  });
-    
-  }, //developing
+            collaboratorQueries.createCollaborator(newCollaborator, (err, collaborator) => {
+              if(err){
+                req.flash("notice", "Collaborator not created", err);
+                res.redirect(req.headers.referer);
+              } else {
+                req.flash("notice", "Collaborator successfully created");
+                res.redirect(req.headers.referer);
+              }
+            });
+            
+          }
+        });
 
+      }
+    });
+      
+  }, //working
+
+  destroy(req, res, next) {
+
+    collaboratorQueries.removeCollaborator(req, (err, collaborator) => {
+      if(err){
+        req.flash("error", err);
+        res.redirect(req.headers.referer);
+      } else {
+        req.flash("notice", "You've successfully removed the collaborator!");
+        res.redirect(req.headers.referer);
+      }
+    });
+  }
 }

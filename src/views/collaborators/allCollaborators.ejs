@@ -1,0 +1,23 @@
+<% if (collaborators) { %> 
+
+  <div class="card">
+    <h2 class="card-header">Wiki Collaborators</h2>
+    <div class="card-body">
+      <ul class="list-group">
+      <% collaborators.forEach((collaborator) => {  %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <%=  collaborator.User.username %>
+          <% if ( currentUser.role === 1 && wiki.userId === currentUser.id ) { %>
+            <form style="display:initial" action="/wikis/<%= wiki.id %>/collaborator/destroy" method="post">
+              <button type="submit" class="btn btn-outline-danger btn-sm">Remove</button>
+            </form>
+          <% } %>
+        </li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+
+
+
+  <% } %>     

@@ -69,21 +69,14 @@ module.exports = {
   show(req, res, next){
     wikiQueries.getWiki(req.params.id, (err, wiki) => {
 
+      collaborators = wiki['collaborators'];
+
       if(err || wiki == null){
         res.redirect(404, "/");
       } else {
-
-        console.log(markdown.toHTML(wiki.body));
-
-        res.render( "wikis/show", 
-          {
-            wiki: {
-              id: wiki.id,
-              title: wiki.title,
-              body: markdown.toHTML(wiki.body)
-            }
-          },
-          );
+        wiki.body = markdown.toHTML(wiki.body);
+        
+        res.render( "wikis/show", { wiki });
       }
     });
   },

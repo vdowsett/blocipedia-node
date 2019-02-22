@@ -7,33 +7,53 @@
       <% include ../static/partials/navbar.ejs %>
       <% include ../static/partials/messages.ejs %>
       
-      <main class="container">
-        
-      <h1><%- wiki.title %></h1>
+      <main class="container mt-5">
       
-      <% if(currentUser) { %>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-body">
 
-        <a href="/wikis/<%- wiki.id %>/edit" class="btn btn-warning">Edit</a>
+                <h1><%- wiki.title %></h1>
 
-        <% if ( currentUser.role === 1 && wiki.userId === currentUser.id ) { %> 
-          <% if ( wiki.private == true ) { %>
-            <form style="display:initial" action="/wikis/<%- wiki.id %>/updatePrivate" method="post">
-              <button type="submit" class="btn btn-warning">Make wiki public</button>
-            </form>
-          <% } else { %>
-            <form style="display:initial" action="/wikis/<%- wiki.id %>/updatePrivate" method="post">
-              <button type="submit" class="btn btn-warning">Make wiki private</button>
-            </form>
-          <% } %>
-        <% } %>
+                <% if(currentUser) { %>
 
-        <form style="display:initial" action="/wikis/<%- wiki.id %>/destroy" method="post">
-          <button type="submit" class="btn btn-danger">Delete</button>
-        </form>
-        
-      <% } %>
+                  <a href="/wikis/<%- wiki.id %>/edit" class="btn btn-outline-info btn-sm">Edit</a>
 
-      <p><%- wiki.body %></p>
+                  <% if ( currentUser.role === 1 && wiki.userId === currentUser.id ) { %> 
+                    <% if ( wiki.private == true ) { %>
+                      <form style="display:initial" action="/wikis/<%- wiki.id %>/updatePrivate" method="post">
+                        <button type="submit" class="btn btn-outline-info btn-sm">Make wiki public</button>
+                      </form>
+                    <% } else { %>
+                      <form style="display:initial" action="/wikis/<%- wiki.id %>/updatePrivate" method="post">
+                        <button type="submit" class="btn btn-outline-info btn-sm">Make wiki private</button>
+                      </form>
+                    <% } %>
+                  <% } %>
+
+                  <form style="display:initial" action="/wikis/<%- wiki.id %>/destroy" method="post">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                  </form>
+                
+                <% } %>
+
+                <p><%- wiki.body %></p>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <% include ../collaborators/allCollaborators.ejs %>
+        </div>
+      </div>
+      
+      
+
+      <hr>
+
+      
 
     </main>
 
