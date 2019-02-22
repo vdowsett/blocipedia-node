@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../static/partials/head.ejs %>
+  </head>
+  <body>
+        <% include ../static/partials/navbar.ejs %>
+        <% include ../static/partials/messages.ejs %>
+        
+        <main class="container">
+      
+      <h1 class="display-3"><%= `${user.username}'s profile` %></h1>
+      
+      <div class="row">
+
+            <div class="col col-lg-7">
+
+                
+                    <% if(wikis.length > 0) { %>
+
+                    <h4> Latest public wikis by <%= `${user.username}` %> </h4>
+                    <ul class="list-unstyled"></ul>
+                            <% wikis.forEach((wiki) => { %>
+                                <% if(wiki.private === false) { %>
+                                    <li> <a href="/wikis/<%= wiki.id %>"> <%= wiki.title %> </a> </li>
+                                <% } %>
+                            <% }) %>
+                    </ul>
+                    
+                    <hr/>
+
+                    <h4> Latest private wikis by <%= `${user.username}` %> </h4>
+                    <ul class="list-unstyled"></ul>
+                            <% wikis.forEach((wiki) => { %>
+                                <% if(wiki.private === true) { %>
+                                    <li> <a href="/wikis/<%= wiki.id %>"> <%= wiki.title %> </a> </li>
+                                <% } %>
+                            <% }) %>
+                    </ul>
+                    <% } else { %>
+                        <p>You have not created any public wikis yet. Create one now: </p>
+                        <a href="/wikis/new" class="btn btn-success">New Wiki</a>
+                    <% } %>
+                    
+                <hr>
+                
+              </div>
+        
+              <div class="col col-lg-4">
+                  <div class="card">
+                    <img src="https://www.fillmurray.com/640/360" class="card-img-top" alt="placeholder">
+                    <div class="p-3">
+                            <h4 class="card-title"> <%= `${user.username}'s Membership` %> </h4>
+                            <% if(currentUser ) { %>
+                            <p class="card-text" >Current membership enrollment:<br/>
+                                <% if(user.role === 0) { %>
+                                    <b>Free Plan</b> 
+                                <% } else { %> 
+                                    <b>Premium Plan</b> 
+                                <% } %>
+                            </p>
+                            <% } %>
+                            <hr>
+                                
+                            <% if(currentUser && user.role === 0) { %>
+                            <div class="form-group">
+                                <h5 class="card-text">Upgrade Membership Plan</h5>
+                                <p>Upgrade your account to access premium benefits such as private wikis</p>
+                                <% include ../static/partials/upgradeCheckout.ejs %>
+                            <% } else if(currentUser && user.role === 1) { %>
+                                <h5>Downgrade Membership Plan</h5>
+                                <form style="display:initial" action="/users/<%= currentUser.id %>/downgrade" method="post">
+                                    <button type="submit" class="btn btn-secondary">Downgrade</button>
+                                </form>
+                            </div>
+                            <% } %>
+                    </div>
+                  </div>
+              </div>
+
+
+      </div>
+      
+    </main>
+
+    <% include ../static/partials/baseScripts.ejs %>
+
+  </body>
+</html>

@@ -1,4 +1,6 @@
 const Wiki = require("./models").Wiki;
+const Collaborator = require("./models").Collaborator;
+const User = require("./models").User;
 
 const Authorizer = require("../policies/application");
 
