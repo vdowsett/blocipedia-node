@@ -17,6 +17,29 @@ module.exports = {
     })
   },
 
+  getLatestWikis(callback) {
+
+    let wikis = {};
+
+    Wiki.findAll()
+    .then((wikis) => {
+
+      if(!wikis) {
+        callback(null, result);
+      } else {
+        Wiki.scope( { method: ["lastTenPublic"] } ).all()
+        .then((wikis) => {
+          wikis["wikis"] = wikis;
+          callback(null, wikis);
+        })
+      }
+    
+    })
+    .catch((err) => {callback(404)});
+      
+    
+  },
+
   addWiki(newWiki, callback) {
 
     return Wiki.create({
