@@ -1,0 +1,19 @@
+<% if ( currentUser && ( currentUser.role == 1 ) && (currentUser.id == wiki.userId )) { %>
+    <div class="card mb-5">
+        <h4 class="card-header">Add Collaborators</h4>
+
+        <div class="card-body">
+            <form action="/wikis/<%= wiki.id %>/collaborator/create" method="post">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="collaboratorEmail">Collaborator's Email</label>
+                        <input value="<%= wiki.collaboratorEmail %>" type="text" class="form-control" name="collaboratorEmail" aria-describedby="titleHelp" placeholder="Enter Collaborator Email">
+                        <small class="text-muted" id="collaboratorEmailHelp">must be a valid and registered email address</small>
+                    </div>
+                    <button type="submit" class="btn btn-outline-info btn-block"> Add Collaborator</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+<% } %>

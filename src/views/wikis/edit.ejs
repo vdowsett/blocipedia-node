@@ -13,7 +13,7 @@
 
         <div class="row">
 
-          <div class="col col-lg-7">
+          <div class="col-lg-8">
             <form action="/wikis/<%= wiki.id %>/update" method="post">
 
               <div class="form-group">
@@ -42,28 +42,9 @@
             </form>
           </div>
 
-          <div class="col col-lg-4">
-            <div class="card">
-              <% if ( currentUser && ( currentUser.role == 1 ) && (currentUser.id == wiki.userId )) { %> 
-
-                <form action="/wikis/<%= wiki.id %>/collaborator/create" method="post">
-                  <div class="card-header"><b class="card-title">Add collaborators</b></div>
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="collaboratorEmail">Collaborator's Email</label>
-                      <input value="<%= wiki.collaboratorEmail %>" type="text" class="form-control" name="collaboratorEmail" aria-describedby="titleHelp" placeholder="Enter Collaborator Email">
-                      <small class="text-muted" id="collaboratorEmailHelp">must be a valid and registered email address</small>
-                    </div>
-                    <button type="submit" class="btn btn-outline-primary btn-block"> Add Collaborator</button>
-                  </div>
-                  
-                </form>
-
-              <% } %>
-
-              <% include ../collaborators/allCollaborators.ejs %>
-
-            </div>
+          <div class="col">
+            <% include ../collaborators/allCollaborators.ejs %>
+            <% include ../collaborators/addCollaborators.ejs %>
           </div>
 
         </div>
