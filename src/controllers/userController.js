@@ -60,7 +60,7 @@ const self = module.exports = {
           res.redirect("/users/sign_up");
         } else {
           req.flash("notice", "You've successfully signed in!");
-          res.redirect("/");
+          res.redirect("/wikis");
         }
       })
 

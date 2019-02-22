@@ -28,7 +28,7 @@ module.exports = {
               collabId: user.id
             }
 
-            collaboratorQueries.createCollaborator(newCollaborator, (err, collaborator) => {
+            collaboratorQueries.createCollaborator(newCollaborator, (err, collaborators) => {
               if(err){
                 req.flash("notice", "Collaborator not created", err);
                 res.redirect(req.headers.referer);
