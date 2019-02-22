@@ -30,14 +30,19 @@ describe("Collaborator", () => {
           body: "Wiki example body",
           private: false,
           userId: this.user.id
-        })
+        }, {
+          include: {
+              model: Collaborator,
+              as: "collaborators"
+          }
+      })
         .then((wiki) => {
           this.wiki = wiki; //store the wiki
           done();
         })
       })
     });
-  });
+  }); //working
 
   describe("#create()", () => {
 
@@ -52,30 +57,23 @@ describe("Collaborator", () => {
         done();
       })
 
-    });
+    }); //working
 
-    it("should post a wiki update and add a new collaborator", (done) => {
+    it("should add a new collaborator to a wiki", (done) => {
 
       const options = {
-        url: `${base}${this.wiki.id}/update`,
+        url: `${base}${this.wiki.id}/collaborator/create`,
         form: {
-          title: "Wiki Editing premium Example",
-          body: "changing wiki",
-          private: true,
-          userId: this.user.id,
           collaboratorEmail: "collaborator@collaborator.com"
         }
       };
 
         request.post(options, (err, res, body) => {
-          Wiki.findOne({
-            where: {id: this.wiki.id}
-          })
-          .then((wiki) => {
-            expect(wiki.title).toBe("Wiki Editing premium Example");
-            Collaborator.findOne({
-              where: { id: 1 }
-            })
+          Collaborator.findOne({
+              where: { 
+                wikiId: this.wiki.id,
+                collabId: this.collabUser.id
+               }
           })
           .then((collaborator) => {
             expect(collaborator.collabId).toBe(2);

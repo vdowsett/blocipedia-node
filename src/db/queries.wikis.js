@@ -34,10 +34,8 @@ module.exports = {
   getWiki(id, callback) {
 
     return Wiki.findById(id)
-
     .then((wiki) => {
       callback(null, wiki);
-      console.log(wiki.posts);
     })
     .catch((err) => {
       callback(err);
@@ -71,7 +69,15 @@ module.exports = {
 
   updateWiki(req, updatedWiki, callback){
 
-    return Wiki.findById(req.params.id)
+    return Wiki.findById(req.params.id, {
+      include: [ //need this to add collaborators, but breaks show view so need to work on it
+        {
+          model: Collaborator, 
+          as: "collaborators", 
+          include: [{ model: User }]
+        },
+      ]
+    })
 
     .then((wiki) => {
 
@@ -82,7 +88,7 @@ module.exports = {
       const authorized = new Authorizer(req.user, wiki).update();
 
       if(authorized) {
-
+        
         wiki.update(updatedWiki, {
           fields: Object.keys(updatedWiki)
         })

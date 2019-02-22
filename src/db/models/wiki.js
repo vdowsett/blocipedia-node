@@ -37,9 +37,9 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "CASCADE"
     });
 
-    Wiki.belongsToMany(models.User, { 
-      through: 'Collaborator', 
-      foreignKey: 'wikiId' 
+    Wiki.hasMany(models.Collaborator, { 
+      foreignKey: 'wikiId',
+      as: "collaborators" 
     });
 
     Wiki.addScope("lastTen", (userId) => {

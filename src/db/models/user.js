@@ -31,10 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
       as: "wikis"
     });
-    
-    User.belongsToMany(models.Wiki, { 
-      through: 'Collaborator', 
-      foreignKey: 'collabId' 
+
+    User.hasMany(models.Collaborator, { 
+      foreignKey: 'collabId',
+      as: "collaborators"
     });
 
   };

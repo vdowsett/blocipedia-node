@@ -102,5 +102,12 @@ module.exports = {
       callback(err);
     });
 
-  }
+  },
+
+  emailLookup(email, callback) {
+    User.findOne({ where: { email: email } })
+    .then((user) => { callback(null, user); })
+    .catch((err) => { callback(err); });
+  },
+
 }
